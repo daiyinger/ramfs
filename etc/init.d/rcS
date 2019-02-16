@@ -2,6 +2,12 @@
 echo "hello world!"
 #mount -t proc proc /proc
 mount -t sysfs sysfs /sys
+#***** for change ramfs *****
+cat /proc/cmdline | grep "switch.ramfs" >/dev/null
+data=$?
+if [ $data -eq 0 ];then
+	exec /etc/switch_to_ramfs
+fi
 #***** for change rootfs *****
 cat /proc/cmdline | grep "switch.rootfs" >/dev/null
 data=$?
@@ -28,10 +34,10 @@ if [ $data -eq 0 ];then
 	if [ ! $cmd ];then
 		cmd="switch_root /rootfs /linuxrc"
 	fi
+	echo ""
 	echo "defult cmd is \"$cmd\""
 	exec $cmd
 else
 	mdev -s	
 fi
-
 

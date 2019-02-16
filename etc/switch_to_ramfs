@@ -1,0 +1,37 @@
+#!/bin/sh 
+
+#***** for change ramfs *****
+mdev -s
+file="/dev/sdb"
+while true
+do
+	sleep 0.1
+	mdev -s
+	#ls /dev
+	if [ ! -e "$file" ]; then
+		#echo "wait file is $file"
+		continue
+	fi
+	#echo "before break"
+	break
+done
+mkdir /rootfs
+mount /dev/sdb /mnt
+mount -t ramfs /dev/ram0 /rootfs
+waitfor_path.sh /mnt/rootfs.cpio.gz
+cp /mnt/rootfs.cpio.gz /rootfs/
+cd /rootfs
+gunzip rootfs.cpio.gz 
+cpio -idvm < rootfs.cpio > /dev/null
+rm rootfs.cpio
+pwd
+#ls /rootfs
+cd /
+read -t 2 -p "please enter your cmd:" cmd
+if [ ! $cmd ];then
+	cmd="switch_root /rootfs /linuxrc"
+fi
+echo ""
+echo "defult cmd is \"$cmd\""
+	exec $cmd
+fi
