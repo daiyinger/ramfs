@@ -1,6 +1,38 @@
 #!/bin/sh 
 echo "hello world!"
-mount -t proc proc /proc
+#mount -t proc proc /proc
 mount -t sysfs sysfs /sys
-mknod /dev/mmcblk0p1 b 179 1
-mknod /dev/mmcblk0p2 b 179 2
+#***** for change rootfs *****
+cat /proc/cmdline | grep "switch.rootfs" >/dev/null
+data=$?
+if [ $data -eq 0 ];then
+	mdev -s
+	file="/dev/sda2"
+	while true
+	do
+		sleep 0.1
+		mdev -s
+		#ls /dev
+		if [ ! -e "$file" ]; then
+  			#echo "wait file is $file"
+			continue
+		fi
+		#echo "before break"
+		break
+	done
+	mkdir /rootfs
+	#pwd
+	mount /dev/sda2 /rootfs
+	#ps
+	read -t 2 -p "please enter your cmd:" cmd
+	if [ ! $cmd ];then
+		cmd="switch_root /rootfs /linuxrc"
+	fi
+	echo "defult cmd is \"$cmd\""
+	exec $cmd
+else
+	mdev -s	
+	echo "**************debug"
+fi
+
+
