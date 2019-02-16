@@ -32,7 +32,6 @@ if [ $data -eq 0 ];then
 	exec $cmd
 else
 	mdev -s	
-	echo "**************debug"
 fi
 
 
