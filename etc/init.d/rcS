@@ -1,37 +1,7 @@
 #!/bin/sh 
-echo "hello world!"
-#mount -t proc proc /proc
+echo "ramfs devlop start!"
+mount -t proc proc /proc
 mount -t sysfs sysfs /sys
-#***** for change rootfs *****
-cat /proc/cmdline | grep "switch.rootfs" >/dev/null
-data=$?
-if [ $data -eq 0 ];then
-	mdev -s
-	file="/dev/sda2"
-	while true
-	do
-		sleep 0.1
-		mdev -s
-		#ls /dev
-		if [ ! -e "$file" ]; then
-  			#echo "wait file is $file"
-			continue
-		fi
-		#echo "before break"
-		break
-	done
-	mkdir /rootfs
-	#pwd
-	mount /dev/sda2 /rootfs
-	#ps
-	read -t 2 -p "please enter your cmd:" cmd
-	if [ ! $cmd ];then
-		cmd="switch_root /rootfs /linuxrc"
-	fi
-	echo "defult cmd is \"$cmd\""
-	exec $cmd
-else
-	mdev -s	
-fi
+mdev -s	
 
 
