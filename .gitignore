@@ -1,3 +1,5 @@
 rootfs.cpio
 rootfs.cpio.gz
 output/*
+*.out
+*_install*

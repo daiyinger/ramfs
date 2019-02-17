@@ -1,7 +1,0 @@
-#!/bin/sh 
-echo "ramfs devlop start!"
-mount -t proc proc /proc
-mount -t sysfs sysfs /sys
-mdev -s	
-
-
